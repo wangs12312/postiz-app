@@ -1,46 +1,134 @@
-import { getT } from '@gitroom/react/translation/get.translation.service.backend';
+import { SentryComponent } from '@gitroom/frontend/components/layout/sentry.component';
 
 export const dynamic = 'force-dynamic';
+import '../global.scss';
+import 'react-tooltip/dist/react-tooltip.css';
+import '@copilotkit/react-ui/styles.css';
+import LayoutContext from '@gitroom/frontend/components/layout/layout.context';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import loadDynamic from 'next/dynamic';
-import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
+import { Plus_Jakarta_Sans } from 'next/font/google';
+import PlausibleProvider from 'next-plausible';
+import clsx from 'clsx';
+import { VariableContextComponent } from '@gitroom/react/helpers/variable.context';
+import { Fragment } from 'react';
+import { PHProvider } from '@gitroom/react/helpers/posthog';
+import UtmSaver from '@gitroom/helpers/utils/utm.saver';
+import { DubAnalytics } from '@gitroom/frontend/components/layout/dubAnalytics';
+import { FacebookComponent } from '@gitroom/frontend/components/layout/facebook.component';
+import { GoogleTagManagerComponent } from '@gitroom/frontend/components/layout/gtm.component';
+import { cookies } from 'next/headers';
+import {
+  cookieName,
+  fallbackLng,
+} from '@gitroom/react/translation/i18n.config';
+import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
+import Script from 'next/script';
+import { ChangeDirClient } from '@gitroom/frontend/components/new-layout/change.dir.client';
 
 export const metadata: Metadata = {
   title: 'YishuiBH - 社交媒体智能管理平台',
   description: '易水百会（YishuiBH）多平台社交媒体内容调度与自动化发布中心',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.png',
+    apple: '/postiz-fav.png',
+  },
 };
 
-const ReturnUrlComponent = loadDynamic(() => import('./return.url.component'));
+const jakartaSans = Plus_Jakarta_Sans({
+  weight: ['600', '500'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+});
 
-export default async function AuthLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const t = await getT();
-
+export default async function AppLayout({ children }: { children: ReactNode }) {
+  const cookieStore = await cookies();
+  const language = cookieStore.get(cookieName)?.value || fallbackLng;
+  const Plausible = !!process.env.STRIPE_PUBLISHABLE_KEY
+    ? PlausibleProvider
+    : Fragment;
   return (
-    <div className="bg-[#0E0E0E] flex flex-1 p-[12px] gap-[12px] min-h-screen w-screen text-white">
-      <ReturnUrlComponent />
-      <div className="flex flex-col py-[40px] px-[20px] flex-1 lg:w-[600px] lg:flex-none rounded-[12px] text-white p-[12px] bg-[#1A1919]">
-        <div className="w-full max-w-[440px] mx-auto justify-center gap-[20px] h-full flex flex-col text-white">
-          <LogoTextComponent />
-          <div className="flex">{children}</div>
-        </div>
-      </div>
-      <div className="flex-1 pt-[40px] pb-[40px] px-[30px] hidden lg:flex flex-col items-center justify-center">
-        <div className="text-[30px] text-center mb-6 font-semibold tracking-tight">
-          一站式多平台社交媒体 <span className="text-[#A855F7]">智能调度中心</span>
-        </div>
-        <div className="w-full max-w-[700px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
-          <img
-            src="https://yishui.yunina.top/auth-banner.png.png"
-            alt="YishuiBH Platform Dashboard"
-            className="w-full h-auto object-cover"
+    <html>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        {!!process.env.DATAFAST_WEBSITE_ID && (
+          <Script
+            data-website-id={process.env.DATAFAST_WEBSITE_ID}
+            data-domain="yishuibh.com"
+            src="https://datafa.st/js/script.js"
+            strategy="afterInteractive"
           />
-        </div>
-      </div>
-    </div>
+        )}
+      </head>
+      <ChangeDirClient />
+      <body
+        className={clsx(jakartaSans.className, 'dark text-primary !bg-primary')}
+      >
+        <VariableContextComponent
+          storageProvider={
+            process.env.STORAGE_PROVIDER! as 'local' | 'cloudflare'
+          }
+          environment={process.env.NODE_ENV!}
+          backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL!}
+          plontoKey={process.env.NEXT_PUBLIC_POLOTNO!}
+          stripeClient={process.env.STRIPE_PUBLISHABLE_KEY!}
+          isChatBase={!!process.env.CHATBASE_TOKEN}
+          billingEnabled={!!process.env.STRIPE_PUBLISHABLE_KEY}
+          discordUrl={process.env.NEXT_PUBLIC_DISCORD_SUPPORT!}
+          frontEndUrl={process.env.FRONTEND_URL!}
+          isGeneral={!!process.env.IS_GENERAL}
+          genericOauth={!!process.env.POSTIZ_GENERIC_OAUTH}
+          oauthLogoUrl={process.env.NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL!}
+          oauthDisplayName={process.env.NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME!}
+          uploadDirectory={process.env.NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY!}
+          cloudflareUrl={process.env.CLOUDFLARE_BUCKET_URL || ''}
+          mainUrl={process.env.MAIN_URL || ''}
+          mcpUrl={process.env.MCP_URL}
+          dub={!!process.env.STRIPE_PUBLISHABLE_KEY}
+          facebookPixel={process.env.NEXT_PUBLIC_FACEBOOK_PIXEL!}
+          telegramBotName={process.env.TELEGRAM_BOT_NAME!}
+          neynarClientId={process.env.NEYNAR_CLIENT_ID!}
+          appleClientId={process.env.APPLE_CLIENT_ID!}
+          isSecured={!process.env.NOT_SECURED}
+          disableImageCompression={!!process.env.DISABLE_IMAGE_COMPRESSION}
+          disableXAnalytics={!!process.env.DISABLE_X_ANALYTICS}
+          sentryDsn={process.env.NEXT_PUBLIC_SENTRY_DSN!}
+          extensionId={process.env.EXTENSION_ID || ''}
+          googleAdsId={process.env.NEXT_PUBLIC_GTM_ID}
+          googleAdsTrialTracking={process.env.NEXT_PUBLIC_TRACKING_TRIAL}
+          language={language}
+          transloadit={
+            process.env.TRANSLOADIT_AUTH && process.env.TRANSLOADIT_TEMPLATE
+              ? [
+                  process.env.TRANSLOADIT_AUTH!,
+                  process.env.TRANSLOADIT_TEMPLATE!,
+                ]
+              : []
+          }
+        >
+          <SentryComponent>
+            {/*<SetTimezone />*/}
+            <HtmlComponent />
+            <DubAnalytics />
+            <FacebookComponent />
+            <GoogleTagManagerComponent gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+            <Plausible
+              domain="yishuibh.com"
+            >
+              <PHProvider
+                phkey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
+                host={process.env.NEXT_PUBLIC_POSTHOG_HOST}
+              >
+                <LayoutContext>
+                  <UtmSaver />
+                  {children}
+                </LayoutContext>
+              </PHProvider>
+            </Plausible>
+          </SentryComponent>
+        </VariableContextComponent>
+      </body>
+    </html>
   );
 }
