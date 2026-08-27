@@ -35,7 +35,7 @@ export default async function AuthLayout({
         </div>
         <div className="w-full max-w-[700px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
           <img
-            src="/auth-banner.png"
+            src="https://yishui.yunina.top/auth-banner.png.png"
             alt="YishuiBH Platform Dashboard"
             className="w-full h-auto object-cover"
           />
