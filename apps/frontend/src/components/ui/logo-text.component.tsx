@@ -4,10 +4,12 @@ import Link from 'next/link';
 export const LogoTextComponent = () => {
   return (
     <Link href="/" className="inline-flex items-center gap-3 no-underline">
-      {/* 品牌方块图标 */}
-      <div className="w-[38px] h-[38px] rounded-xl bg-gradient-to-tr from-[#612BD3] to-[#A855F7] flex items-center justify-center font-black text-white text-[20px] shadow-lg shadow-purple-500/30">
-        Y
-      </div>
+      {/* 云存储公网品牌图标 */}
+      <img
+        src="https://yishui.yunina.top/favicon.ico.png"
+        alt="YishuiBH"
+        className="w-[42px] h-[42px] object-contain cursor-pointer"
+      />
       {/* 品牌文字 */}
       <div className="flex flex-col text-start">
         <span className="text-white text-[22px] font-bold tracking-wide leading-tight">
