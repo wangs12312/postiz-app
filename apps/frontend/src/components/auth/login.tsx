@@ -16,12 +16,14 @@ import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { FarcasterProvider } from '@gitroom/frontend/components/auth/providers/farcaster.provider';
 import WalletProvider from '@gitroom/frontend/components/auth/providers/wallet.provider';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+
 type Inputs = {
   email: string;
   password: string;
   providerToken: '';
   provider: 'LOCAL';
 };
+
 export function Login() {
   const t = useT();
   const [loading, setLoading] = useState(false);
@@ -158,6 +160,31 @@ export function Login() {
                   </Link>
                 </p>
               </div>
+
+              {/* 审核合规链接与品牌版权 */}
+              <div className="mt-8 pt-4 border-t border-fifth/30 text-xs text-textColor/60 flex flex-col items-center gap-2">
+                <div className="flex gap-4">
+                  <a
+                    href="https://terms.yishuibh.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline hover:text-textColor transition-colors"
+                  >
+                    Terms of Service
+                  </a>
+                  <span>•</span>
+                  <a
+                    href="https://privacy.yishuibh.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline hover:text-textColor transition-colors"
+                  >
+                    Privacy Policy
+                  </a>
+                </div>
+                <p>© 2026 YishuiBH. All rights reserved.</p>
+              </div>
+
             </div>
           </div>
         </div>
