@@ -24,6 +24,7 @@ import dynamic from 'next/dynamic';
 import { WalletUiProvider } from '@gitroom/frontend/components/auth/providers/placeholder/wallet.ui.provider';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import useCookie from 'react-use-cookie';
+
 const WalletProvider = dynamic(
   () => import('@gitroom/frontend/components/auth/providers/wallet.provider'),
   {
@@ -31,6 +32,7 @@ const WalletProvider = dynamic(
     loading: () => <WalletUiProvider />,
   }
 );
+
 type Inputs = {
   email: string;
   password: string;
@@ -38,6 +40,7 @@ type Inputs = {
   providerToken: string;
   provider: string;
 };
+
 export function Register() {
   const getQuery = useSearchParams();
   const fetch = useFetch();
@@ -45,11 +48,13 @@ export function Register() {
   const [code, setCode] = useState(getQuery?.get('code') || '');
   const [state] = useState(getQuery?.get('state') || '');
   const [show, setShow] = useState(false);
+
   useEffect(() => {
     if (provider && code) {
       load();
     }
   }, []);
+
   const load = useCallback(async () => {
     const { token } = await (
       await fetch(`/auth/oauth/${provider?.toUpperCase() || 'LOCAL'}/exists`, {
@@ -65,16 +70,20 @@ export function Register() {
       setShow(true);
     }
   }, [provider, code]);
+
   if (!code && !provider) {
     return <RegisterAfter token="" provider="LOCAL" />;
   }
+
   if (!show) {
     return <LoadingComponent />;
   }
+
   return (
     <RegisterAfter token={code} provider={provider?.toUpperCase() || 'LOCAL'} />
   );
 }
+
 function getHelpfulReasonForRegistrationFailure(httpCode: number) {
   switch (httpCode) {
     case 400:
@@ -84,6 +93,7 @@ function getHelpfulReasonForRegistrationFailure(httpCode: number) {
   }
   return 'Unhandled error: ' + httpCode;
 }
+
 export function RegisterAfter({
   token,
   provider,
@@ -104,12 +114,15 @@ export function RegisterAfter({
   const fireEvents = useFireEvents();
   const track = useTrack();
   const [datafast_visitor_id] = useCookie('datafast_visitor_id');
+
   const isAfterProvider = useMemo(() => {
     return !!token && !!provider;
   }, [token, provider]);
+
   const resolver = useMemo(() => {
     return classValidatorResolver(CreateOrgUserDto);
   }, []);
+
   const form = useForm<Inputs>({
     resolver,
     defaultValues: {
@@ -117,6 +130,7 @@ export function RegisterAfter({
       provider: provider,
     },
   });
+
   const fetchData = useFetch();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
@@ -153,6 +167,7 @@ export function RegisterAfter({
         });
       });
   };
+
   return (
     <FormProvider {...form}>
       <form className="flex-1 flex" onSubmit={form.handleSubmit(onSubmit)}>
@@ -228,17 +243,19 @@ export function RegisterAfter({
                 )}
                 &nbsp;
                 <a
-                  href={`https://postiz.com/terms`}
+                  href="https://terms.yishuibh.com"
+                  target="_blank"
                   className="underline hover:font-bold"
-                  rel="nofollow"
+                  rel="noreferrer"
                 >
                   {t('terms_of_service', 'Terms of Service')}
                 </a>
                 &nbsp;
                 {t('and', 'and')}&nbsp;
                 <a
-                  href={`https://postiz.com/privacy`}
-                  rel="nofollow"
+                  href="https://privacy.yishuibh.com"
+                  target="_blank"
+                  rel="noreferrer"
                   className="underline hover:font-bold"
                 >
                   {t('privacy_policy', 'Privacy Policy')}
@@ -260,12 +277,18 @@ export function RegisterAfter({
                   &nbsp;
                   <Link
                     href="/auth/login"
-                    className="underline  cursor-pointer"
+                    className="underline cursor-pointer"
                   >
                     {t('sign_in', 'Sign In')}
                   </Link>
                 </p>
               </div>
+
+              {/* 审核合规与品牌版权 */}
+              <div className="mt-8 pt-4 border-t border-fifth/30 text-xs text-textColor/60 text-center">
+                <p>© 2026 YishuiBH. All rights reserved.</p>
+              </div>
+
             </div>
           </div>
         </div>
