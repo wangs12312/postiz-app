@@ -2,10 +2,18 @@ import { getT } from '@gitroom/react/translation/get.translation.service.backend
 
 export const dynamic = 'force-dynamic';
 import { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import loadDynamic from 'next/dynamic';
 import { TestimonialComponent } from '@gitroom/frontend/components/auth/testimonial.component';
 import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
+
+export const metadata: Metadata = {
+  title: 'YishuiBH - 社交媒体智能管理平台',
+  description: '易水百会（YishuiBH）多平台社交媒体内容调度与自动化发布中心',
+};
+
 const ReturnUrlComponent = loadDynamic(() => import('./return.url.component'));
+
 export default async function AuthLayout({
   children,
 }: {
@@ -28,7 +36,7 @@ export default async function AuthLayout({
           Over <span className="text-[42px] text-[#FC69FF]">20,000+</span>{' '}
           Entrepreneurs use
           <br />
-          Postiz To Grow Their Social Presence
+          YishuiBH To Grow Their Social Presence
         </div>
         <TestimonialComponent />
       </div>
