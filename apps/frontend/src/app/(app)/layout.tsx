@@ -6,6 +6,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import '@copilotkit/react-ui/styles.css';
 import LayoutContext from '@gitroom/frontend/components/layout/layout.context';
 import { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import PlausibleProvider from 'next-plausible';
 import clsx from 'clsx';
@@ -24,6 +25,16 @@ import {
 import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
 import Script from 'next/script';
 import { ChangeDirClient } from '@gitroom/frontend/components/new-layout/change.dir.client';
+
+export const metadata: Metadata = {
+  title: 'YishuiBH - 社交媒体智能管理平台',
+  description: '易水百会（YishuiBH）多平台社交媒体内容调度与自动化发布中心',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.png',
+    apple: '/postiz-fav.png',
+  },
+};
 
 const jakartaSans = Plus_Jakarta_Sans({
   weight: ['600', '500'],
@@ -44,7 +55,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         {!!process.env.DATAFAST_WEBSITE_ID && (
           <Script
             data-website-id={process.env.DATAFAST_WEBSITE_ID}
-            data-domain="postiz.com"
+            data-domain="yishuibh.com"
             src="https://datafa.st/js/script.js"
             strategy="afterInteractive"
           />
@@ -103,7 +114,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             <FacebookComponent />
             <GoogleTagManagerComponent gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
             <Plausible
-              domain={!!process.env.IS_GENERAL ? 'postiz.com' : 'gitroom.com'}
+              domain="yishuibh.com"
             >
               <PHProvider
                 phkey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
