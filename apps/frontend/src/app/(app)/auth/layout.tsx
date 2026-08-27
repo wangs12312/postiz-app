@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import loadDynamic from 'next/dynamic';
-import { TestimonialComponent } from '@gitroom/frontend/components/auth/testimonial.component';
 import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
 
 export const metadata: Metadata = {
@@ -23,7 +22,6 @@ export default async function AuthLayout({
 
   return (
     <div className="bg-[#0E0E0E] flex flex-1 p-[12px] gap-[12px] min-h-screen w-screen text-white">
-      {/*<style>{`html, body {overflow-x: hidden;}`}</style>*/}
       <ReturnUrlComponent />
       <div className="flex flex-col py-[40px] px-[20px] flex-1 lg:w-[600px] lg:flex-none rounded-[12px] text-white p-[12px] bg-[#1A1919]">
         <div className="w-full max-w-[440px] mx-auto justify-center gap-[20px] h-full flex flex-col text-white">
@@ -31,14 +29,17 @@ export default async function AuthLayout({
           <div className="flex">{children}</div>
         </div>
       </div>
-      <div className="text-[36px] flex-1 pt-[88px] hidden lg:flex flex-col items-center">
-        <div className="text-center">
-          Over <span className="text-[42px] text-[#FC69FF]">20,000+</span>{' '}
-          Entrepreneurs use
-          <br />
-          YishuiBH To Grow Their Social Presence
+      <div className="flex-1 pt-[40px] pb-[40px] px-[30px] hidden lg:flex flex-col items-center justify-center">
+        <div className="text-[30px] text-center mb-6 font-semibold tracking-tight">
+          一站式多平台社交媒体 <span className="text-[#A855F7]">智能调度中心</span>
         </div>
-        <TestimonialComponent />
+        <div className="w-full max-w-[700px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
+          <img
+            src="/auth-banner.png"
+            alt="YishuiBH Platform Dashboard"
+            className="w-full h-auto object-cover"
+          />
+        </div>
       </div>
     </div>
   );
